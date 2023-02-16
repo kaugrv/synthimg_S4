@@ -1,1 +1,0 @@
-/usr/bin/clang++ -g CMakeFiles/TP3_Hello_Triangle_exo1_triangle_blanc.dir/exo1_triangle_blanc.cpp.o -o TP3_Hello_Triangle_exo1_triangle_blanc  ../glimac/libglimac.a /usr/lib/x86_64-linux-gnu/libSDLmain.a /usr/lib/x86_64-linux-gnu/libSDL.so -lpthread /usr/lib/x86_64-linux-gnu/libGL.so.1 /usr/lib/x86_64-linux-gnu/libGLEW.so 
