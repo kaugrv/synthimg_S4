@@ -1,0 +1,57 @@
+[
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/glimac.dir/src/Cone.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Cone.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Cone.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/glimac.dir/src/Geometry.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Geometry.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Geometry.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/glimac.dir/src/Image.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Image.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Image.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/glimac.dir/src/Program.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Program.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Program.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/glimac.dir/src/SDLWindowManager.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/SDLWindowManager.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/SDLWindowManager.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/glimac.dir/src/Shader.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Shader.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Shader.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/glimac.dir/src/Sphere.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Sphere.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/Sphere.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/glimac.dir/src/tiny_obj_loader.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/tiny_obj_loader.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/src/tiny_obj_loader.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP3_Hello_Triangle",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/TP3_Hello_Triangle_exo1_triangle_blanc.dir/exo1_triangle_blanc.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/TP3_Hello_Triangle/exo1_triangle_blanc.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/TP3_Hello_Triangle/exo1_triangle_blanc.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP3_Hello_Triangle",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/TP3_Hello_Triangle_SDLtemplate.dir/SDLtemplate.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/TP3_Hello_Triangle/SDLtemplate.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/TP3_Hello_Triangle/SDLtemplate.cpp"
+},
+{
+  "directory": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP_template",
+  "command": "/usr/bin/clang++  -I/usr/include/SDL -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/glimac/include -I/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/third-party/include -g   -std=c++11 -o CMakeFiles/TP_template_SDLtemplate.dir/SDLtemplate.cpp.o -c /home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/TP_template/SDLtemplate.cpp",
+  "file": "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/TP_template/SDLtemplate.cpp"
+}
+]

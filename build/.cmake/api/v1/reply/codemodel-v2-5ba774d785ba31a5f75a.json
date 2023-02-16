@@ -1,0 +1,131 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "glimac",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "glimac",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "TP3_Hello_Triangle",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "TP3_Hello_Triangle",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				},
+				{
+					"build" : "TP_template",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.18"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "TP_template",
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					],
+					"name" : "ImacGL",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "TP3_Hello_Triangle_SDLtemplate::@ec1a2e8318f3ece52c4d",
+					"jsonFile" : "target-TP3_Hello_Triangle_SDLtemplate-Debug-5c00b50374fe6ff2f4fa.json",
+					"name" : "TP3_Hello_Triangle_SDLtemplate",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "TP3_Hello_Triangle_exo1_triangle_blanc::@ec1a2e8318f3ece52c4d",
+					"jsonFile" : "target-TP3_Hello_Triangle_exo1_triangle_blanc-Debug-2dc61a7431bd6c6aead3.json",
+					"name" : "TP3_Hello_Triangle_exo1_triangle_blanc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "TP_template_SDLtemplate::@23a3ca8c27463d044e33",
+					"jsonFile" : "target-TP_template_SDLtemplate-Debug-94f751f973e4dba39872.json",
+					"name" : "TP_template_SDLtemplate",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "glimac::@cfa65abc3ab409b74416",
+					"jsonFile" : "target-glimac-Debug-0bdf43d4e314f9350ad9.json",
+					"name" : "glimac",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build",
+		"source" : "/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 1
+	}
+}

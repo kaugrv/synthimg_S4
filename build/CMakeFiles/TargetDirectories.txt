@@ -1,0 +1,12 @@
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/CMakeFiles/rebuild_cache.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/CMakeFiles/edit_cache.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac/CMakeFiles/rebuild_cache.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac/CMakeFiles/edit_cache.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/glimac/CMakeFiles/glimac.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP3_Hello_Triangle/CMakeFiles/rebuild_cache.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP3_Hello_Triangle/CMakeFiles/edit_cache.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP3_Hello_Triangle/CMakeFiles/TP3_Hello_Triangle_exo1_triangle_blanc.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP3_Hello_Triangle/CMakeFiles/TP3_Hello_Triangle_SDLtemplate.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP_template/CMakeFiles/rebuild_cache.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP_template/CMakeFiles/edit_cache.dir
+/home/6ima2/wendy.gervais/Documents/SYNTHESEIMG/synthimg_S4/GLImac-Template/build/TP_template/CMakeFiles/TP_template_SDLtemplate.dir
