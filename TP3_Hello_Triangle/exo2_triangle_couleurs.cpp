@@ -1,4 +1,6 @@
 #include <GL/glew.h>
+#include <glimac/FilePath.hpp>
+#include <glimac/Program.hpp>
 #include <glimac/SDLWindowManager.hpp>
 #include <iostream>
 
@@ -15,8 +17,16 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
+  // Load shaders
+  FilePath applicationPath(argv[0]);
+  Program program =
+      loadProgram(applicationPath.dirPath() + "shaders/triangle.vs.glsl",
+                  applicationPath.dirPath() + "shaders/triangle.fs.glsl");
+  program.use();
+
   std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
   std::cout << "GLEW Version : " << glewGetString(GLEW_VERSION) << std::endl;
+  std::cout << "Application Path : " << applicationPath.dirPath() << std::endl;
 
   /*********************************
    * INITIALIZATION BEGIN
@@ -26,8 +36,13 @@ int main(int argc, char **argv) {
   GLuint vbo;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  GLfloat vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
-  glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+  // GLfloat vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
+  GLfloat vertices[] = {
+      -0.5f, -0.5f, 1.f, 0.f, 0.f, // premier sommet
+      0.5f,  -0.5f, 0.f, 1.f, 0.f, // deuxième sommet
+      0.0f,  0.5f,  0.f, 0.f, 1.f  // troisième sommet
+  };
+  glBufferData(GL_ARRAY_BUFFER, 15 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   // VAO (vertex specification)
@@ -36,12 +51,20 @@ int main(int argc, char **argv) {
   glBindVertexArray(vao);
 
   // Activation of vertex attributes
-  const GLuint VERTEX_ATTR_POSITION = 0;
+  const GLuint VERTEX_ATTR_POSITION = 3;
+  const GLuint COLOR_ATTR_POSITION = 8;
+
   glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+  glEnableVertexAttribArray(COLOR_ATTR_POSITION);
+
   // Specification of vertex attributes
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glVertexAttribPointer(VERTEX_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE,
-                        2 * sizeof(GLfloat), 0);
+                        5 * sizeof(GLfloat),
+                        (const GLvoid *)(0 * sizeof(GLfloat)));
+  glVertexAttribPointer(COLOR_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE,
+                        5 * sizeof(GLfloat),
+                        (const GLvoid *)(2 * sizeof(GLfloat)));
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   glBindVertexArray(0);
