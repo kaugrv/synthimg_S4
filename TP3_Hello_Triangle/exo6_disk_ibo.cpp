@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include <cstddef>
+#include <cstdint>
 #include <glimac/FilePath.hpp>
 #include <glimac/Program.hpp>
 #include <glimac/SDLWindowManager.hpp>
@@ -54,35 +55,60 @@ int main(int argc, char **argv) {
 
   std::vector<Vertex2DColor> vertices;
 
-  int n = 100;
+  int n_sectors = 200;
   float R = 0.5;
 
-  for (int i = 0; i <= n + 1; i++) {
+  // centre
+  vertices.push_back(Vertex2DColor(glm::vec2(0, 0), glm::vec3(0, 0, 1)));
 
-    // sommet 1
+  for (int i = 0; i < n_sectors; i++) {
+
+    // sommet i
     vertices.push_back(Vertex2DColor(
-        glm::vec2(R * glm::cos(2 * i * glm::pi<float>() / (float)n),
-                  R * glm::sin(2 * i * glm::pi<float>() / (float)n)),
+        glm::vec2(R * glm::cos(2 * i * glm::pi<float>() / (float)n_sectors),
+                  R * glm::sin(2 * i * glm::pi<float>() / (float)n_sectors)),
         glm::vec3(1, 0, 0)));
-
-    // centre
-    vertices.push_back(Vertex2DColor(glm::vec2(0, 0), glm::vec3(0, 0, 1)));
-
-    // sommet 2
-    vertices.push_back(Vertex2DColor(
-        glm::vec2(R * glm::cos(2 * (i + 1) * glm::pi<float>() / (float)n),
-                  R * glm::sin(2 * (i + 1) * glm::pi<float>() / (float)n)),
-        glm::vec3(0, 0, 1)));
   }
 
-  glBufferData(GL_ARRAY_BUFFER, 3 * n * sizeof(Vertex2DColor), vertices.data(),
-               GL_STATIC_DRAW);
+  // => Tableau d'indices: ce sont les indices des sommets à dessiner
+  // On en a 6 afin de former deux triangles
+  // Chaque indice correspond au sommet correspondant dans le VBO
+  std::vector<GLuint> indices;
+  for (int i = 1; i < n_sectors; i++) {
+    indices.push_back(0);
+    indices.push_back(i);
+    indices.push_back(i + 1);
+  }
+  indices.push_back(0);
+  indices.push_back(n_sectors);
+  indices.push_back(1);
+
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex2DColor),
+               vertices.data(), GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  // => Creation du IBO
+  GLuint ibo;
+  glGenBuffers(1, &ibo);
+
+  // => On bind sur GL_ELEMENT_ARRAY_BUFFER, cible reservée pour les IBOs
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+  // => On remplit l'IBO avec les indices:
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t),
+               indices.data(), GL_STATIC_DRAW);
+
+  // => Comme d'habitude on debind avant de passer à autre chose
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
   // VAO (vertex specification)
   GLuint vao;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
+
+  // => On bind l'IBO sur GL_ELEMENT_ARRAY_BUFFER; puisqu'un VAO est
+  // actuellement bindé, cela a pour effet d'enregistrer l'IBO dans le VAO
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
   // Activation of vertex attributes
   const GLuint VERTEX_ATTR_POSITION = 3;
@@ -123,7 +149,11 @@ int main(int argc, char **argv) {
      *********************************/
     glBindVertexArray(vao);
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, 3 * n * sizeof(Vertex2DColor));
+
+    // => On utilise glDrawElements à la place de glDrawArrays
+    // Cela indique à OpenGL qu'il doit utiliser l'IBO enregistré dans le VAO
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+
     glBindVertexArray(0);
 
     /*********************************

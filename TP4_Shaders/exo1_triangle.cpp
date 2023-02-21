@@ -1,29 +1,14 @@
 #include <GL/glew.h>
-#include <cstddef>
 #include <glimac/FilePath.hpp>
 #include <glimac/Program.hpp>
 #include <glimac/SDLWindowManager.hpp>
-#include <glimac/glm.hpp>
 #include <iostream>
-#include <vector>
 
 using namespace glimac;
 
-class Vertex2DColor {
-private:
-public:
-  glm::vec2 m_position;
-  glm::vec3 m_color;
-
-  Vertex2DColor();
-  Vertex2DColor(glm::vec2 position, glm::vec3 color)
-      : m_position(position), m_color(color){};
-};
-
 int main(int argc, char **argv) {
-
   // Initialize SDL and open a window
-  SDLWindowManager windowManager(800, 600, "Disk");
+  SDLWindowManager windowManager(800, 600, "Triangle");
 
   // Initialize glew for OpenGL3+ support
   GLenum glewInitError = glewInit();
@@ -35,8 +20,8 @@ int main(int argc, char **argv) {
   // Load shaders
   FilePath applicationPath(argv[0]);
   Program program =
-      loadProgram(applicationPath.dirPath() + "shaders/triangle.vs.glsl",
-                  applicationPath.dirPath() + "shaders/triangle.fs.glsl");
+      loadProgram(applicationPath.dirPath() + "shaders" + argv[1],
+                  applicationPath.dirPath() + "shaders" + argv[2]);
   program.use();
 
   std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
@@ -51,32 +36,13 @@ int main(int argc, char **argv) {
   GLuint vbo;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-  std::vector<Vertex2DColor> vertices;
-
-  int n = 100;
-  float R = 0.5;
-
-  for (int i = 0; i <= n + 1; i++) {
-
-    // sommet 1
-    vertices.push_back(Vertex2DColor(
-        glm::vec2(R * glm::cos(2 * i * glm::pi<float>() / (float)n),
-                  R * glm::sin(2 * i * glm::pi<float>() / (float)n)),
-        glm::vec3(1, 0, 0)));
-
-    // centre
-    vertices.push_back(Vertex2DColor(glm::vec2(0, 0), glm::vec3(0, 0, 1)));
-
-    // sommet 2
-    vertices.push_back(Vertex2DColor(
-        glm::vec2(R * glm::cos(2 * (i + 1) * glm::pi<float>() / (float)n),
-                  R * glm::sin(2 * (i + 1) * glm::pi<float>() / (float)n)),
-        glm::vec3(0, 0, 1)));
-  }
-
-  glBufferData(GL_ARRAY_BUFFER, 3 * n * sizeof(Vertex2DColor), vertices.data(),
-               GL_STATIC_DRAW);
+  // GLfloat vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
+  GLfloat vertices[] = {
+      -0.5f, -0.5f, 1.f, 0.f, 0.f, // premier sommet
+      0.5f,  -0.5f, 0.f, 1.f, 0.f, // deuxième sommet
+      0.0f,  0.5f,  0.f, 0.f, 1.f  // troisième sommet
+  };
+  glBufferData(GL_ARRAY_BUFFER, 15 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   // VAO (vertex specification)
@@ -85,8 +51,8 @@ int main(int argc, char **argv) {
   glBindVertexArray(vao);
 
   // Activation of vertex attributes
-  const GLuint VERTEX_ATTR_POSITION = 3;
-  const GLuint COLOR_ATTR_POSITION = 8;
+  const GLuint VERTEX_ATTR_POSITION = 0;
+  const GLuint COLOR_ATTR_POSITION = 1;
 
   glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
   glEnableVertexAttribArray(COLOR_ATTR_POSITION);
@@ -94,11 +60,11 @@ int main(int argc, char **argv) {
   // Specification of vertex attributes
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glVertexAttribPointer(VERTEX_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE,
-                        sizeof(Vertex2DColor),
-                        (const GLvoid *)offsetof(Vertex2DColor, m_position));
+                        5 * sizeof(GLfloat),
+                        (const GLvoid *)(0 * sizeof(GLfloat)));
   glVertexAttribPointer(COLOR_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE,
-                        sizeof(Vertex2DColor),
-                        (const GLvoid *)offsetof(Vertex2DColor, m_color));
+                        5 * sizeof(GLfloat),
+                        (const GLvoid *)(2 * sizeof(GLfloat)));
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   glBindVertexArray(0);
@@ -123,7 +89,7 @@ int main(int argc, char **argv) {
      *********************************/
     glBindVertexArray(vao);
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, 3 * n * sizeof(Vertex2DColor));
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(0);
 
     /*********************************
