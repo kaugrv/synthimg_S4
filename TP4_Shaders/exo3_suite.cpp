@@ -1,4 +1,5 @@
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <cstddef>
 #include <glimac/FilePath.hpp>
 #include <glimac/Program.hpp>
@@ -19,6 +20,21 @@ public:
       : m_position(position), m_texture(texture){};
 };
 
+glm::mat3 translate(float tx, float ty) {
+  return glm::mat3(1, 0, 0, 0, 1, 0, tx, ty, 1);
+}
+
+glm::mat3 scale(float sx, float sy) {
+  return glm::mat3(sx, 0, 0, 0, sy, 0, 0, 0, 1);
+}
+
+glm::mat3 rotate(float a) {
+  float c = cos(glm::radians(a));
+  float s = sin(glm::radians(a));
+
+  return glm::mat3(c, s, 0, -s, c, 0, 0, 0, 1);
+}
+
 int main(int argc, char **argv) {
   // Initialize SDL and open a window
   SDLWindowManager windowManager(800, 600, "GLImac");
@@ -36,6 +52,10 @@ int main(int argc, char **argv) {
       loadProgram(applicationPath.dirPath() + "shaders/tex2D.vs.glsl",
                   applicationPath.dirPath() + "shaders/tex2D.fs.glsl");
   program.use();
+
+  GLint uTime_location = glGetUniformLocation(program.getGLId(), "uTime");
+  GLint uModelMatrix_location =
+      glGetUniformLocation(program.getGLId(), "uModelMatrix");
 
   std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
   std::cout << "GLEW Version : " << glewGetString(GLEW_VERSION) << std::endl;
@@ -88,7 +108,9 @@ int main(int argc, char **argv) {
 
   // Application loop:
   bool done = false;
+  float t = 0.;
   while (!done) {
+    t += 1.;
     // Event loop:
     SDL_Event e;
     while (windowManager.pollEvent(e)) {
@@ -96,6 +118,12 @@ int main(int argc, char **argv) {
         done = true; // Leave the loop after this iteration
       }
     }
+
+    glUniform1f(uTime_location, t);
+
+    glm::mat3 R = rotate(t);
+
+    glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE, glm::value_ptr(R));
 
     /*********************************
      * RENDERING BEGIN

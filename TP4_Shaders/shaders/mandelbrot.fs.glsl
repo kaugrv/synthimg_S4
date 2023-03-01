@@ -27,5 +27,5 @@ void main() {
     }
   }
 
-  fFragColor = vec3(float(i) / N);
+  fFragColor = vec3(1, 1, 1);
 }

@@ -61,6 +61,7 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "__nullptr": "cpp",
-        "__node_handle": "cpp"
+        "__node_handle": "cpp",
+        "complex": "cpp"
     }
 }
