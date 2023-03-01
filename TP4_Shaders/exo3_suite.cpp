@@ -8,18 +8,20 @@
 
 using namespace glimac;
 
-class Vertex2DColor {
+class Vertex2DUV {
 private:
 public:
   glm::vec2 m_position;
+  glm::vec2 m_texture;
 
-  Vertex2DColor();
-  Vertex2DColor(glm::vec2 position) : m_position(position){};
+  Vertex2DUV();
+  Vertex2DUV(glm::vec2 position, glm::vec2 texture)
+      : m_position(position), m_texture(texture){};
 };
 
 int main(int argc, char **argv) {
   // Initialize SDL and open a window
-  SDLWindowManager windowManager(800, 600, "Mandelbrotu");
+  SDLWindowManager windowManager(800, 600, "GLImac");
 
   // Initialize glew for OpenGL3+ support
   GLenum glewInitError = glewInit();
@@ -31,8 +33,8 @@ int main(int argc, char **argv) {
   // Load shaders
   FilePath applicationPath(argv[0]);
   Program program =
-      loadProgram(applicationPath.dirPath() + "shaders/mandelbrot.vs.glsl",
-                  applicationPath.dirPath() + "shaders/mandelbrot.fs.glsl");
+      loadProgram(applicationPath.dirPath() + "shaders/tex2D.vs.glsl",
+                  applicationPath.dirPath() + "shaders/tex2D.fs.glsl");
   program.use();
 
   std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
@@ -48,13 +50,11 @@ int main(int argc, char **argv) {
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-  // Using my class
-  Vertex2DColor vertices[] = {
-      Vertex2DColor(glm::vec2(-1, 1)),  Vertex2DColor(glm::vec2(1, 1)),
-      Vertex2DColor(glm::vec2(1, -1)),  Vertex2DColor(glm::vec2(-1, 1)),
-      Vertex2DColor(glm::vec2(-1, -1)), Vertex2DColor(glm::vec2(1, -1))};
+  Vertex2DUV vertices[] = {Vertex2DUV(glm::vec2(-1, -1), glm::vec2(0, 0)),
+                           Vertex2DUV(glm::vec2(1, -1), glm::vec2(0, 0)),
+                           Vertex2DUV(glm::vec2(0, 1), glm::vec2(0, 0))};
 
-  glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(Vertex2DColor), vertices,
+  glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vertex2DUV), vertices,
                GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -65,15 +65,19 @@ int main(int argc, char **argv) {
 
   // Activation of vertex attributes
   const GLuint VERTEX_ATTR_POSITION = 0;
+  const GLuint UV_ATTR_POSITION = 1;
 
   glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+  glEnableVertexAttribArray(UV_ATTR_POSITION);
 
   // Specification of vertex attributes
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glVertexAttribPointer(VERTEX_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE,
-                        sizeof(Vertex2DColor),
-                        (const GLvoid *)offsetof(Vertex2DColor, m_position));
-
+                        sizeof(Vertex2DUV),
+                        (const GLvoid *)offsetof(Vertex2DUV, m_position));
+  glVertexAttribPointer(UV_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE,
+                        sizeof(Vertex2DUV),
+                        (const GLvoid *)offsetof(Vertex2DUV, m_texture));
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   glBindVertexArray(0);
@@ -98,7 +102,7 @@ int main(int argc, char **argv) {
      *********************************/
     glBindVertexArray(vao);
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(0);
 
     /*********************************
