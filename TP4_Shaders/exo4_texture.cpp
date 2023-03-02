@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <cstddef>
 #include <glimac/FilePath.hpp>
+#include <glimac/Image.hpp>
 #include <glimac/Program.hpp>
 #include <glimac/SDLWindowManager.hpp>
 #include <glimac/glm.hpp>
@@ -53,14 +54,22 @@ int main(int argc, char **argv) {
                   applicationPath.dirPath() + "shaders/tex2D.fs.glsl");
   program.use();
 
+  // Load Textures
+  auto triforce_ptr = glimac::loadImage(applicationPath.dirPath() + ".." +
+                                        ".." + "assets/texture/triforce.png");
+
+  std::cout << (triforce_ptr == NULL) << std::endl;
+
   GLint uTime_location = glGetUniformLocation(program.getGLId(), "uTime");
   GLint uModelMatrix_location =
       glGetUniformLocation(program.getGLId(), "uModelMatrix");
   GLint uColor_location = glGetUniformLocation(program.getGLId(), "uColor");
+  GLint uTexture_location = glGetUniformLocation(program.getGLId(), "uTexture");
 
-  std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
-  std::cout << "GLEW Version : " << glewGetString(GLEW_VERSION) << std::endl;
-  std::cout << "Application Path : " << applicationPath.dirPath() << std::endl;
+  // std::cout << "OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
+  // std::cout << "GLEW Version : " << glewGetString(GLEW_VERSION) << std::endl;
+  // std::cout << "Application Path : " << applicationPath.dirPath() <<
+  // std::endl;
 
   /*********************************
    * INITIALIZATION BEGIN
@@ -71,9 +80,9 @@ int main(int argc, char **argv) {
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-  Vertex2DUV vertices[] = {Vertex2DUV(glm::vec2(-1, -1), glm::vec2(0, 0)),
-                           Vertex2DUV(glm::vec2(1, -1), glm::vec2(0, 0)),
-                           Vertex2DUV(glm::vec2(0, 1), glm::vec2(0, 0))};
+  Vertex2DUV vertices[] = {Vertex2DUV(glm::vec2(-1, -1), glm::vec2(0.5, 0)),
+                           Vertex2DUV(glm::vec2(1, -1), glm::vec2(1, 1)),
+                           Vertex2DUV(glm::vec2(0, 1), glm::vec2(0, 1))};
 
   glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vertex2DUV), vertices,
                GL_STATIC_DRAW);
@@ -102,6 +111,18 @@ int main(int argc, char **argv) {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   glBindVertexArray(0);
+
+  // Textures
+  GLuint texture;
+  glGenTextures(1, &texture);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glTexImage2D(GL_TEXTURE_2D, 0, 3, triforce_ptr->getWidth(),
+               triforce_ptr->getHeight(), 0, GL_RGBA, GL_FLOAT,
+               triforce_ptr->getPixels());
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glBindTexture(GL_TEXTURE_2D, 0);
 
   /*********************************
    * INITIALIZATION END
@@ -135,67 +156,19 @@ int main(int argc, char **argv) {
     glBindVertexArray(vao);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // uModelMatrix = translate(-0.75, 0) * scale(0.3, 0.3) * rotate(t);
-    // uColor = glm::vec3(1, 0, 1);
-    // glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE,
-    //                    glm::value_ptr(uModelMatrix));
-    // glUniform3f(uColor_location, uColor.x, uColor.y, uColor.z);
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    // uModelMatrix = translate(-0.25, 0) * scale(0.3, 0.3) * rotate(-t);
-    // glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE,
-    //                    glm::value_ptr(uModelMatrix));
-    // uColor = glm::vec3(0, 0, 1);
-    // glUniform3f(uColor_location, uColor.x, uColor.y, uColor.z);
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    // uModelMatrix = translate(0.25, 0) * scale(0.3, 0.3) * rotate(t);
-    // glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE,
-    //                    glm::value_ptr(uModelMatrix));
-    // uColor = glm::vec3(1, 1, 1);
-    // glUniform3f(uColor_location, uColor.x, uColor.y, uColor.z);
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    // uModelMatrix = translate(0.75, 0) * scale(0.3, 0.3) * rotate(-t);
-    // glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE,
-    //                    glm::value_ptr(uModelMatrix));
-    // uColor = glm::vec3(1, 1, 0);
-    // glUniform3f(uColor_location, uColor.x, uColor.y, uColor.z);
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    uModelMatrix =
-        rotate(t) * translate(-0.75, 0) * rotate(-t) * scale(0.3, 0.3);
     uColor = glm::vec3(1, 0, 1);
+    uModelMatrix = rotate(t);
     glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE,
                        glm::value_ptr(uModelMatrix));
     glUniform3f(uColor_location, uColor.x, uColor.y, uColor.z);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    uModelMatrix =
-        rotate(-t) * translate(-0.75, -0) * rotate(t) * scale(0.3, 0.3);
-    glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE,
-                       glm::value_ptr(uModelMatrix));
-    uColor = glm::vec3(0, 0, 1);
-    glUniform3f(uColor_location, uColor.x, uColor.y, uColor.z);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glUniform1i(uTexture_location, 0);
 
-    uModelMatrix =
-        rotate(-t) * translate(0.75, -0) * rotate(t) * scale(0.3, 0.3);
-    glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE,
-                       glm::value_ptr(uModelMatrix));
-    uColor = glm::vec3(1, 1, 0);
-    glUniform3f(uColor_location, uColor.x, uColor.y, uColor.z);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    uModelMatrix =
-        rotate(t) * translate(0.75, -0) * rotate(-t) * scale(0.3, 0.3);
-    glUniformMatrix3fv(uModelMatrix_location, 1, GL_FALSE,
-                       glm::value_ptr(uModelMatrix));
-    uColor = glm::vec3(0, 1, 0);
-    glUniform3f(uColor_location, uColor.x, uColor.y, uColor.z);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     /*********************************
      * RENDERING END
@@ -205,6 +178,7 @@ int main(int argc, char **argv) {
     windowManager.swapBuffers();
   }
 
+  glDeleteTextures(1, &texture);
   glDeleteBuffers(1, &vbo);
   glDeleteVertexArrays(1, &vao);
 

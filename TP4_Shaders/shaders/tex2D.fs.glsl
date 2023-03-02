@@ -6,4 +6,6 @@ in vec2 vFragPosition;
 out vec3 fFragColor;
 out vec2 fFragPosition;
 
-void main() { fFragColor = vFragColor; }
+uniform vec3 uColor;
+
+void main() { fFragColor = uColor; }
