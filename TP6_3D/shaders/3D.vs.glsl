@@ -13,8 +13,15 @@ out vec3 vNormalPosition;
 out vec2 vTexPosition;
 
 void main() {
-  vVertexPosition = vec3((uMVMatrix * vec4(aVertexPosition, 1)).xyz);
-  vNormalPosition = vec3((uNormalMatrix * vec4(aNormalPosition, 1)).xyz);
+  // Passage en coordonnées homogènes
+  vec4 vertexPosition = vec4(aVertexPosition, 1);
+  vec4 vertexNormal = vec4(aNormalPosition, 0);
+
+  // Calcul des valeurs de sortie
+  vVertexPosition = vec3(uMVMatrix * vertexPosition);
+  vNormalPosition = vec3(uNormalMatrix * vertexNormal);
   vTexPosition = aTexPosition;
-  gl_Position = vec4((uMVPMatrix * vec4(aVertexPosition, 1)).xy, 0, 1);
+
+  // Calcul de la position projetée
+  gl_Position = uMVPMatrix * vertexPosition;
 }

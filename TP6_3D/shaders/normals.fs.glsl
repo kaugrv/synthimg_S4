@@ -6,4 +6,7 @@ in vec2 vTexPosition;
 
 out vec3 fFragColor;
 
-void main() { fFragColor = vNormalPosition; }
+void main() {
+  fFragColor = normalize(vNormalPosition);
+  // fFragColor = vec3(1.);
+}
