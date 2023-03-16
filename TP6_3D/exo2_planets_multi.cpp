@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
                  cloud_ptr->getPixels());
 
     glUniform1i(uPlanetTexture_location, 0);
-    glUniform1i(uPlanetTexture_location, 1);
+    glUniform1i(uCloudTexture_location, 1);
 
     glDrawArrays(GL_TRIANGLES, 0, S.getVertexCount()); // Grande sphère
 
