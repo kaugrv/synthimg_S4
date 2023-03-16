@@ -62,6 +62,7 @@
         "typeinfo": "cpp",
         "__nullptr": "cpp",
         "__node_handle": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "__locale": "cpp"
     }
 }

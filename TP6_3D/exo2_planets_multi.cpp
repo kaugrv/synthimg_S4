@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
   FilePath applicationPath(argv[0]);
   Program program =
       loadProgram(applicationPath.dirPath() + "shaders/3D.vs.glsl",
-                  applicationPath.dirPath() + "shaders/tex3D.fs.glsl");
+                  applicationPath.dirPath() + "shaders/multiTex3D.fs.glsl");
   program.use();
 
   // Load Textures
@@ -38,16 +38,19 @@ int main(int argc, char **argv) {
                                      "assets/texture/EarthMap.jpg");
   auto moon_ptr = glimac::loadImage(applicationPath.dirPath() + ".." + ".." +
                                     "assets/texture/MoonMap.jpg");
-
-  std::cout << (earth_ptr == NULL) << std::endl;
-  std::cout << (moon_ptr == NULL) << std::endl;
+  auto cloud_ptr = glimac::loadImage(applicationPath.dirPath() + ".." + ".." +
+                                     "assets/texture/CloudMap.jpg");
 
   // Get Matrix locations
   GLint MVP_location = glGetUniformLocation(program.getGLId(), "uMVPMatrix");
   GLint MV_location = glGetUniformLocation(program.getGLId(), "uMVMatrix");
   GLint Normal_location =
       glGetUniformLocation(program.getGLId(), "uNormalMatrix");
-  GLint uTexture_location = glGetUniformLocation(program.getGLId(), "uTexture");
+
+  GLint uPlanetTexture_location =
+      glGetUniformLocation(program.getGLId(), "uPlanetTexture");
+  GLint uCloudTexture_location =
+      glGetUniformLocation(program.getGLId(), "uCloudTexture");
 
   glEnable(GL_DEPTH_TEST);
 
@@ -104,16 +107,32 @@ int main(int argc, char **argv) {
   glBindVertexArray(0);
 
   // Textures
-  GLuint texture;
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
+  GLuint planet_texture;
+  glGenTextures(1, &planet_texture);
+  glActiveTexture(GL_TEXTURE0);
+
+  glBindTexture(GL_TEXTURE_2D, planet_texture);
   glTexImage2D(GL_TEXTURE_2D, 0, 3, earth_ptr->getWidth(),
                earth_ptr->getHeight(), 0, GL_RGBA, GL_FLOAT,
                earth_ptr->getPixels());
-
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
   glBindTexture(GL_TEXTURE_2D, 0);
+
+  GLuint cloud_texture;
+  glGenTextures(1, &cloud_texture);
+
+  glActiveTexture(GL_TEXTURE1);
+
+  glBindTexture(GL_TEXTURE_2D, cloud_texture);
+  glTexImage2D(GL_TEXTURE_2D, 0, 3, cloud_ptr->getWidth(),
+               cloud_ptr->getHeight(), 0, GL_RGBA, GL_FLOAT,
+               cloud_ptr->getPixels());
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glBindTexture(GL_TEXTURE_2D, 0); // débind sur l'unité GL_TEXTURE1
 
   /*********************************
    * INITIALIZATION END
@@ -121,8 +140,7 @@ int main(int argc, char **argv) {
 
   // Application loop:
   bool done = false;
-  float t = 0.;
-  int nb_lunes = 10;
+  int nb_lunes = 32;
 
   std::vector<glm::vec3> AxisList;
   for (int i = 0; i < nb_lunes; i++) {
@@ -131,11 +149,10 @@ int main(int argc, char **argv) {
 
   std::vector<glm::vec3> BeginPosList;
   for (int i = 0; i < nb_lunes; i++) {
-    BeginPosList.push_back(glm::sphericalRand(2.f));
+    BeginPosList.push_back(glm::sphericalRand(1.5f));
   }
 
   while (!done) {
-    t += 1.;
 
     float time = windowManager.getTime();
 
@@ -163,18 +180,33 @@ int main(int argc, char **argv) {
     glUniformMatrix4fv(Normal_location, 1, GL_FALSE,
                        glm::value_ptr(NormalMatrix));
 
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, planet_texture);
+
     glTexImage2D(GL_TEXTURE_2D, 0, 3, earth_ptr->getWidth(),
                  earth_ptr->getHeight(), 0, GL_RGBA, GL_FLOAT,
                  earth_ptr->getPixels());
-    glUniform1i(uTexture_location, 0);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, cloud_texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, cloud_ptr->getWidth(),
+                 cloud_ptr->getHeight(), 0, GL_RGBA, GL_FLOAT,
+                 cloud_ptr->getPixels());
+
+    glUniform1i(uPlanetTexture_location, 0);
+    glUniform1i(uPlanetTexture_location, 1);
+
     glDrawArrays(GL_TRIANGLES, 0, S.getVertexCount()); // Grande sphère
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, planet_texture);
 
     glTexImage2D(GL_TEXTURE_2D, 0, 3, moon_ptr->getWidth(),
                  moon_ptr->getHeight(), 0, GL_RGBA, GL_FLOAT,
                  moon_ptr->getPixels());
 
-    glUniform1i(uTexture_location, 0);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, 0); // débind sur l'unité GL_TEXTURE1
 
     for (int i = 0; i < nb_lunes; i++) {
       glm::mat4 MVMoon = glm::scale(
@@ -192,7 +224,8 @@ int main(int argc, char **argv) {
       glDrawArrays(GL_TRIANGLES, 0, S.getVertexCount());
     }
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, 0); // débind sur l'unité GL_TEXTURE0
 
     glBindVertexArray(0);
 
@@ -204,7 +237,7 @@ int main(int argc, char **argv) {
     windowManager.swapBuffers();
   }
 
-  // glDeleteTextures(1, &texture);
+  glDeleteTextures(1, &planet_texture);
   glDeleteBuffers(1, &vbo);
   glDeleteVertexArrays(1, &vao);
 
