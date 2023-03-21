@@ -63,6 +63,10 @@
         "__nullptr": "cpp",
         "__node_handle": "cpp",
         "complex": "cpp",
-        "__locale": "cpp"
+        "__locale": "cpp",
+        "__atomic": "cpp",
+        "filesystem": "cpp",
+        "codecvt": "cpp",
+        "fstream": "cpp"
     }
 }
