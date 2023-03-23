@@ -2,11 +2,11 @@
 #include <GLFW/glfw3.h>
 #include <cstddef>
 #include <glimac/FilePath.hpp>
+#include <glimac/FreeflyCamera.hpp>
 #include <glimac/Image.hpp>
 #include <glimac/Program.hpp>
 #include <glimac/SDLWindowManager.hpp>
 #include <glimac/Sphere.hpp>
-#include <glimac/TrackballCamera.hpp>
 #include <glimac/glm.hpp>
 #include <iostream>
 
@@ -70,7 +70,7 @@ struct MoonProgram {
 int main(int argc, char **argv) {
 
   // Initialize SDL and open a window
-  SDLWindowManager windowManager(800, 600, "Traque boule");
+  SDLWindowManager windowManager(800, 600, "Libre voler");
 
   // Initialize glew for OpenGL3+ support
   GLenum glewInitError = glewInit();
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
   glEnable(GL_DEPTH_TEST);
 
   // Camera
-  TrackballCamera C;
+  FreeflyCamera C;
 
   // Initialize Matrix
   glm::mat4 ProjMatrix =
@@ -227,7 +227,6 @@ int main(int argc, char **argv) {
   while (!done) {
 
     float time = windowManager.getTime();
-    std::cout << "<3" << std::endl;
 
     // Event loop:
     SDL_Event e;
@@ -239,14 +238,25 @@ int main(int argc, char **argv) {
     }
     glm::vec2 startPos = windowManager.getMousePosition();
 
-    std::cout << endPos - startPos << std::endl;
+    std::cout << C.m_Position << std::endl;
+    std::cout << C.getViewMatrix() << std::endl;
 
     if (windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)) {
       C.rotateLeft((endPos - startPos).x);
       C.rotateUp((endPos - startPos).y);
     }
-    if (windowManager.isMouseButtonPressed(SDL_BUTTON_RIGHT)) {
-      C.moveFront((endPos - startPos).y / 100.);
+
+    if (windowManager.isKeyPressed(SDLK_z)) {
+      C.moveFront(1);
+    }
+    if (windowManager.isKeyPressed(SDLK_s)) {
+      C.moveFront(-1);
+    }
+    if (windowManager.isKeyPressed(SDLK_q)) {
+      C.moveLeft(1);
+    }
+    if (windowManager.isKeyPressed(SDLK_d)) {
+      C.moveLeft(-1);
     }
 
     /*********************************

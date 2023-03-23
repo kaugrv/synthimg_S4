@@ -12,21 +12,9 @@ private:
 public:
   TrackballCamera() : m_fDistance(5.f), m_fAngleX(0.f), m_fAngleY(0.f){};
 
-  void moveFront(float delta) {
-    std::cout << delta << std::endl;
-
-    if (m_fDistance >= 0) {
-      m_fDistance = delta;
-    }
-  }
-  void rotateLeft(float degrees) {
-    std::cout << degrees << std::endl;
-    m_fAngleY = degrees;
-  };
-  void rotateUp(float degrees) {
-    std::cout << degrees << std::endl;
-    m_fAngleX = degrees;
-  };
+  void moveFront(float delta) { m_fDistance += delta; }
+  void rotateLeft(float degrees) { m_fAngleY += degrees; };
+  void rotateUp(float degrees) { m_fAngleX += degrees; };
 
   glm::mat4 getViewMatrix() {
     glm::mat4 T =
