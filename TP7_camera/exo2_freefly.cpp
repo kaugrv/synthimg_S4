@@ -238,25 +238,23 @@ int main(int argc, char **argv) {
     }
     glm::vec2 startPos = windowManager.getMousePosition();
 
-    std::cout << C.m_Position << std::endl;
-    std::cout << C.getViewMatrix() << std::endl;
-
     if (windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)) {
-      C.rotateLeft((endPos - startPos).x);
-      C.rotateUp((endPos - startPos).y);
+      std::cout << "CLIC" << std::endl;
+      C.rotateLeft((endPos - startPos).x * 10.);
+      C.rotateUp((endPos - startPos).y * 10.);
     }
 
     if (windowManager.isKeyPressed(SDLK_z)) {
-      C.moveFront(1);
+      C.moveFront(0.3);
     }
     if (windowManager.isKeyPressed(SDLK_s)) {
-      C.moveFront(-1);
+      C.moveFront(-0.3);
     }
     if (windowManager.isKeyPressed(SDLK_q)) {
-      C.moveLeft(1);
+      C.moveLeft(0.3);
     }
     if (windowManager.isKeyPressed(SDLK_d)) {
-      C.moveLeft(-1);
+      C.moveLeft(-0.3);
     }
 
     /*********************************

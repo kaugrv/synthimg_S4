@@ -20,10 +20,11 @@ public:
         glm::vec3(cos(glm::radians(m_fTheta)) * sin(glm::radians(m_fPhi)),
                   sin(glm::radians(m_fTheta)),
                   cos(glm::radians(m_fTheta)) * cos(glm::radians(m_fPhi)));
-    m_FrontVector = glm::vec3(sin(glm::radians(m_fPhi) + PI / 2.), 0.,
-                              cos(glm::radians(m_fPhi) + PI / 2.));
+    m_LeftVector = glm::vec3(sin(glm::radians(m_fPhi) + PI / 2.), 0.,
+                             cos(glm::radians(m_fPhi) + PI / 2.));
     m_UpVector = glm::cross(m_FrontVector, m_LeftVector);
   }
+
   FreeflyCamera() : m_Position(glm::vec3(0.)), m_fPhi(PI), m_fTheta(0.) {
     computeDirectionVectors();
   };
