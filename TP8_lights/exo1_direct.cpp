@@ -111,18 +111,20 @@ int main(int argc, char **argv) {
   TrackballCamera C;
 
   // Initialize Matrix
+
+  glm::mat4 VMatrix = C.getViewMatrix();
   glm::mat4 ProjMatrix =
       glm::perspective<float>(glm::radians(70.f), 800. / 600., 0.1f, 100.f);
-
   glm::mat4 MVMatrix = translate(0., 0., -5.);
   glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
   // Lights
-  glm::vec3 Kd = glm::vec3(0.5, 1., 0.2);
-  glm::vec3 Ks = glm::vec3(0.5);
-  float Shininess = 1.;
-  glm::vec3 LightDir_vs = glm::vec3(1.);
-  glm::vec3 LightIntensity = glm::vec3(1., 0, 0);
+  glm::vec3 Kd = glm::vec3(1., 1., 1.);
+  glm::vec3 Ks = glm::vec3(1.);
+  float Shininess = 15.;
+
+  glm::vec3 LightDir_vs = glm::vec3(0., 0., 1.);
+  glm::vec3 LightIntensity = glm::vec3(1., 0., 1.); // RED
 
   /*********************************
    * INITIALIZATION BEGIN
@@ -190,7 +192,7 @@ int main(int argc, char **argv) {
   // List of rotation axis of moons
   std::vector<glm::vec3> AxisList;
   for (int i = 0; i < nb_lunes; i++) {
-    AxisList.push_back(glm::sphericalRand(2.f));
+    AxisList.push_back(glm::sphericalRand(2.5f));
   }
 
   // List of begin positions of moons
@@ -219,6 +221,7 @@ int main(int argc, char **argv) {
     }
     glm::vec2 startPos = windowManager.getMousePosition();
 
+    // Camera commands
     if (windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)) {
       C.rotateLeft((endPos - startPos).x);
       C.rotateUp((endPos - startPos).y);
@@ -232,7 +235,7 @@ int main(int argc, char **argv) {
      *********************************/
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0., 0., 1., 1.);
+    glClearColor(0., 0., 0.5, 1.);
 
     // Bind VAO
     glBindVertexArray(vao);
@@ -240,55 +243,65 @@ int main(int argc, char **argv) {
     /// EARTH ///
     earthProgram.m_Program.use();
 
-    MVMatrix = C.getViewMatrix();
+    VMatrix = C.getViewMatrix();
 
-    glm::mat4 MVEarth = glm::rotate(MVMatrix, time, glm::vec3(0, 1, 0));
-    NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+    glm::mat4 MEarth = glm::rotate(glm::mat4(1.), time, glm::vec3(0., 1., 0.));
+    glm::mat4 MVEarth = VMatrix * MEarth;
+    glm::mat4 MVPEarth = ProjMatrix * MVEarth;
+    glm::mat4 NormalEarth = glm::transpose(glm::inverse(MVEarth));
 
-    glUniformMatrix4fv(earthProgram.MVP_location, 1, GL_FALSE,
-                       glm::value_ptr(ProjMatrix * MVEarth));
     glUniformMatrix4fv(earthProgram.MV_location, 1, GL_FALSE,
                        glm::value_ptr(MVEarth));
-    glUniformMatrix4fv(earthProgram.Normal_location, 1, GL_FALSE,
-                       glm::value_ptr(NormalMatrix));
+    glUniformMatrix4fv(earthProgram.MVP_location, 1, GL_FALSE,
+                       glm::value_ptr(MVPEarth));
 
-    glUniform3f(earthProgram.Kd_location, Kd.x, Kd.y, Kd.z);
-    glUniform3f(earthProgram.Ks_location, Ks.x, Ks.y, Ks.z);
+    NormalMatrix = glm::transpose(glm::inverse(VMatrix));
+    glUniformMatrix4fv(earthProgram.Normal_location, 1, GL_FALSE,
+                       glm::value_ptr(NormalEarth));
+
+    glUniform3fv(earthProgram.Kd_location, 1, glm::value_ptr(Kd));
+    glUniform3fv(earthProgram.Ks_location, 1, glm::value_ptr(Ks));
     glUniform1f(earthProgram.Shininess_location, Shininess);
 
     glm::vec4 LDMV4 =
-        glm::vec4(LightDir_vs.x, LightDir_vs.y, LightDir_vs.z, 1.) * MVMatrix;
-
+        VMatrix * glm::vec4(LightDir_vs.x, LightDir_vs.y, LightDir_vs.z, 0.);
     glm::vec3 LDMV3 = glm::vec3(LDMV4.x, LDMV4.y, LDMV4.z);
 
-    glUniform3f(earthProgram.LightDir_vs_location, LightDir_vs.x, LightDir_vs.y,
-                LightDir_vs.z);
-    glUniform3f(earthProgram.LightIntensity_location, LDMV3.x, LDMV3.y,
-                LDMV3.z);
+    glUniform3fv(earthProgram.LightDir_vs_location, 1, glm::value_ptr(LDMV3));
+
+    glUniform3fv(earthProgram.LightIntensity_location, 1,
+                 glm::value_ptr(LightIntensity));
 
     glDrawArrays(GL_TRIANGLES, 0, S.getVertexCount()); // EARTH DRAW
 
     moonProgram.m_Program.use();
     for (int i = 0; i < nb_lunes; i++) {
-      glm::mat4 MVMoon =
-          glm::scale(glm::translate(glm::rotate(MVMatrix, time, AxisList[i]),
-                                    BeginPosList[i]),
-                     glm::vec3(0.2, 0.2, 0.2));
+      glm::mat4 MMoon = glm::scale(
+          glm::translate(glm::rotate(glm::mat4(1.), time, AxisList[i]),
+                         BeginPosList[i]),
+          glm::vec3(0.2, 0.2, 0.2));
       // Translation * Rotation * Translation * Scale
 
+      glm::mat4 MVMoon = VMatrix * MMoon;
+      glm::mat4 MVPMoon = ProjMatrix * MVMoon;
+
       glUniformMatrix4fv(moonProgram.MVP_location, 1, GL_FALSE,
-                         glm::value_ptr(ProjMatrix * MVMoon));
+                         glm::value_ptr(MVPMoon));
       glUniformMatrix4fv(moonProgram.MV_location, 1, GL_FALSE,
-                         glm::value_ptr(MVMatrix));
+                         glm::value_ptr(MVMoon));
 
-      glUniform3f(moonProgram.Kd_location, Kd.x, Kd.y, Kd.z);
-      glUniform3f(moonProgram.Ks_location, Ks.x, Ks.y, Ks.z);
-      glUniform1f(moonProgram.Shininess_location, Shininess);
+      glm::mat4 NormalMoon = glm::transpose(glm::inverse(MVMoon));
+      glUniformMatrix4fv(moonProgram.Normal_location, 1, GL_FALSE,
+                         glm::value_ptr(NormalMoon));
 
-      glUniform3f(moonProgram.LightDir_vs_location, LightDir_vs.x,
-                  LightDir_vs.y, LightDir_vs.z);
-      glUniform3f(moonProgram.LightIntensity_location, LDMV3.x, LDMV3.y,
-                  LDMV3.z);
+      // glUniform3f(moonProgram.Kd_location, Kd.x, Kd.y, Kd.z);
+      // glUniform3f(moonProgram.Ks_location, Ks.x, Ks.y, Ks.z);
+      // glUniform1f(moonProgram.Shininess_location, Shininess);
+
+      // glUniform3f(moonProgram.LightDir_vs_location, LightDir_vs.x,
+      //             LightDir_vs.y, LightDir_vs.z);
+      // glUniform3f(moonProgram.LightIntensity_location, LDMV3.x, LDMV3.y,
+      //             LDMV3.z);
 
       glDrawArrays(GL_TRIANGLES, 0, S.getVertexCount());
     }
